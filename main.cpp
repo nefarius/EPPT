@@ -89,11 +89,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
 		ImGui::SetNextWindowSize(ImVec2((vm.width * 1.0f), (vm.height * 1.0f)));
 		ImGui::Begin("Enhance Pointer Precision Tool", &isOpen,
-			ImGuiWindowFlags_NoResize
-			| ImGuiWindowFlags_NoCollapse
-			| ImGuiWindowFlags_NoMove
-			| ImGuiWindowFlags_NoSavedSettings
-			| ImGuiWindowFlags_NoScrollbar);
+		             ImGuiWindowFlags_NoResize
+		             | ImGuiWindowFlags_NoCollapse
+		             | ImGuiWindowFlags_NoMove
+		             | ImGuiWindowFlags_NoSavedSettings
+		             | ImGuiWindowFlags_NoScrollbar);
 
 		if (!isOpen) break;
 
