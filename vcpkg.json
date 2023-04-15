@@ -1,0 +1,12 @@
+{
+  "name": "maccel",
+  "version": "1.0.0",
+  "description": "maccel",
+  "license": "MIT",
+  "supports": "!(arm | uwp)",
+  "dependencies": [
+    "sfml",
+    "imgui",
+    "imgui-sfml"
+  ]
+}
