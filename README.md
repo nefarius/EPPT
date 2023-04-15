@@ -8,7 +8,7 @@ A simple, self-contained Windows tool to display and toggle "Enhanced Pointer Pr
 
 ## About
 
-This little tool was birthed during an FPS gaming session where we tested different mouse settings and quickly realized that a lot of mouse configuration software (like iCUE from CORSAIR) likes to silently turn mouse acceleration on which distorts the aim feel in games like Quake Champions. It's deliberately kept minimal; just a modal window with a checkbox that represents the current state and lets you toggle it.
+This little tool was birthed during an FPS gaming session where we tested different mouse settings and quickly realized that a lot of mouse configuration software (like iCUE from CORSAIR) likes to silently turn mouse acceleration on which distorts the aim feel in games like Quake Champions. This option is buried somewhere deep within Windows' nonsensical UI so I made this tool for it. It's deliberately kept minimal; just a modal window with a checkbox that represents the current state and lets you toggle it.
 
 ## Screenshots
 
