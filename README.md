@@ -2,7 +2,7 @@
 
 # Enhance Pointer Precision Tool
 
-[![MSBuild](https://github.com/nefarius/EPPT/actions/workflows/msbuild.yml/badge.svg)](https://github.com/nefarius/EPPT/actions/workflows/msbuild.yml)
+[![MSBuild](https://github.com/nefarius/EPPT/actions/workflows/msbuild.yml/badge.svg)](https://github.com/nefarius/EPPT/actions/workflows/msbuild.yml) ![GitHub all releases](https://img.shields.io/github/downloads/nefarius/EPPT/total)
 
 A simple, self-contained Windows tool to display and toggle "Enhanced Pointer Precision" a.k.a. mouse acceleration.
 
