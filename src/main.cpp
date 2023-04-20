@@ -17,6 +17,11 @@
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(szCmdLine);
+	UNREFERENCED_PARAMETER(iCmdShow);
+
+	LPCWSTR settingsName = L"WindowPlacement";
 	auto vm = sf::VideoMode(280, 60);
 	sf::RenderWindow window(vm, "Enhance Pointer Precision Tool", sf::Style::None);
 
@@ -29,6 +34,42 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	SetWindowLong(window.getSystemHandle(), GWL_STYLE, WS_POPUP | WS_VISIBLE);
 	DwmExtendFrameIntoClientArea(window.getSystemHandle(), &margins);
 
+	WINDOWPLACEMENT placement;
+	DWORD valueType, bytesRead = sizeof(WINDOWPLACEMENT);
+	HKEY appKey = NULL;
+
+	// create/query settings key
+	LSTATUS status = RegCreateKeyEx(
+		HKEY_CURRENT_USER,
+		L"SOFTWARE\\Nefarius Software Solutions e.U.\\EPPT",
+		0,
+		NULL,
+		REG_OPTION_NON_VOLATILE,
+		KEY_ALL_ACCESS,
+		NULL,
+		&appKey,
+		NULL
+	);
+
+	if (status == ERROR_SUCCESS)
+	{
+		status = RegQueryValueEx(
+			appKey,
+			settingsName,
+			0,
+			&valueType,
+			(LPBYTE)&placement,
+			&bytesRead
+		);
+
+		// restore last window position
+		if (status == ERROR_SUCCESS && bytesRead == sizeof(WINDOWPLACEMENT))
+		{
+			SetWindowPlacement(window.getSystemHandle(), &placement);
+		}
+	}
+
+	// set topmost flag
 	SetWindowPos(window.getSystemHandle(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
 	// Set window icon
@@ -58,7 +99,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			else if (event.type == sf::Event::KeyPressed)
 			{
 				if (event.key.code == sf::Keyboard::Escape)
+				{
 					window.close();
+				}
 			}
 			// Mouse events used to react to dragging
 			else if (event.type == sf::Event::MouseButtonPressed)
@@ -89,11 +132,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
 		ImGui::SetNextWindowSize(ImVec2((vm.width * 1.0f), (vm.height * 1.0f)));
 		ImGui::Begin("Enhance Pointer Precision Tool", &isOpen,
-		             ImGuiWindowFlags_NoResize
-		             | ImGuiWindowFlags_NoCollapse
-		             | ImGuiWindowFlags_NoMove
-		             | ImGuiWindowFlags_NoSavedSettings
-		             | ImGuiWindowFlags_NoScrollbar);
+			ImGuiWindowFlags_NoResize
+			| ImGuiWindowFlags_NoCollapse
+			| ImGuiWindowFlags_NoMove
+			| ImGuiWindowFlags_NoSavedSettings
+			| ImGuiWindowFlags_NoScrollbar);
 
 		if (!isOpen) break;
 
@@ -118,6 +161,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 		ImGui::SFML::Render(window);
 		window.display();
+	}
+
+	// store window position in registry
+	if (appKey)
+	{
+		GetWindowPlacement(window.getSystemHandle(), &placement);
+
+		RegSetValueEx(
+			appKey,
+			settingsName,
+			0,
+			REG_BINARY,
+			(LPBYTE)&placement,
+			sizeof(WINDOWPLACEMENT)
+		);
+
+		RegCloseKey(appKey);
 	}
 
 	ImGui::SFML::Shutdown();
