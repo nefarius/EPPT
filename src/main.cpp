@@ -136,7 +136,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			| ImGuiWindowFlags_NoCollapse
 			| ImGuiWindowFlags_NoMove
 			| ImGuiWindowFlags_NoSavedSettings
-			| ImGuiWindowFlags_NoScrollbar);
+			| ImGuiWindowFlags_NoScrollbar
+		);
 
 		if (!isOpen) break;
 
