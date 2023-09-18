@@ -7,6 +7,7 @@
   "dependencies": [
     "sfml",
     "imgui",
-    "imgui-sfml"
+    "imgui-sfml",
+    "argh"
   ]
 }

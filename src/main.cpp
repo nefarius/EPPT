@@ -3,6 +3,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <Dwmapi.h>
+#include <shellapi.h>
 
 // ImGui + SFML helper
 #include "imgui.h"
@@ -13,6 +14,10 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
 
+// CLI parser
+#include <argh.h>
+
+#include "UniUtil.h"
 #include "resource.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
@@ -20,6 +25,64 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(szCmdLine);
 	UNREFERENCED_PARAMETER(iCmdShow);
+
+#pragma region CLI parsing
+
+	argh::parser cmdl;
+
+	LPWSTR* szArglist;
+	int nArgs;
+	int i;
+
+	szArglist = CommandLineToArgvW(GetCommandLineW(), &nArgs);
+	if (nullptr == szArglist)
+	{
+		return EXIT_FAILURE;
+	}
+
+	std::vector<const char*> argv;
+	std::vector<std::string> narrow;
+
+	for (i = 0; i < nArgs; i++)
+	{
+		narrow.push_back(ConvertWideToANSI(std::wstring(szArglist[i])));
+	}
+
+	argv.resize(nArgs);
+	std::transform(narrow.begin(), narrow.end(), argv.begin(), [](const std::string& arg) { return arg.c_str(); });
+
+	argv.push_back(nullptr);
+
+	cmdl.parse(nArgs, &argv[0]);
+
+#pragma endregion
+
+#pragma region CLI processing
+
+	int mParams[3];
+
+	// Get the current values.
+	SystemParametersInfo(SPI_GETMOUSE, 0, mParams, 0);
+
+	if (cmdl[{ "-d", "--disable" }])
+	{
+		mParams[2] = false;
+	}
+	else if (cmdl[{ "-e", "--enable" }])
+	{
+		mParams[2] = true;
+	}
+
+	// Update the system setting.
+	SystemParametersInfo(SPI_SETMOUSE, 0, mParams, SPIF_SENDCHANGE);
+
+	// do not create window, exit if instructed
+	if (cmdl[{ "-a", "--exit" }])
+	{
+		return ERROR_SUCCESS;
+	}
+
+#pragma endregion
 
 	LPCWSTR settingsName = L"WindowPlacement";
 	auto vm = sf::VideoMode(280, 60);
@@ -141,6 +204,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 		if (!isOpen) break;
 
+#pragma region Change acceleration settings
+
 		int mouseParams[3], accel;
 
 		// Get the current values.
@@ -153,8 +218,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 		// Value has been changed by user
 		if (accel != mouseParams[2])
+		{
 			// Update the system setting.
 			SystemParametersInfo(SPI_SETMOUSE, 0, mouseParams, SPIF_SENDCHANGE);
+		}
+
+#pragma endregion
 
 		ImGui::End();
 

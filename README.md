@@ -14,8 +14,25 @@ This little tool was birthed during an FPS gaming session where we tested differ
 
 ![EPPT_ohWuHUA6P8.png](assets/EPPT_ohWuHUA6P8.png)
 
+## Command Line Switches
+
+You can toggle acceleration on and off from the command line (autostart) if you like as follows; disable:
+
+```cmd
+.\EPPT.exe --disable --exit
+```
+
+And enable:
+
+```cmd
+.\EPPT.exe --enable --exit
+```
+
+If you omit the `--exit` switch the main window will get displayed.
+
 ## 3rd party credits
 
 - [Dear ImGui](https://github.com/ocornut/imgui)
 - [Simple and Fast Multimedia Library](https://www.sfml-dev.org/)
 - [ImGui-SFML](https://github.com/SFML/imgui-sfml)
+- [Argh! A minimalist argument handler](https://github.com/adishavit/argh)
