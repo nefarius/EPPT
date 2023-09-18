@@ -19,4 +19,4 @@ This little tool was birthed during an FPS gaming session where we tested differ
 - [Dear ImGui](https://github.com/ocornut/imgui)
 - [Simple and Fast Multimedia Library](https://www.sfml-dev.org/)
 - [ImGui-SFML](https://github.com/SFML/imgui-sfml)
-- [Argh! A minimalist argument handler](https://github.com/adishavit/argh
+- [Argh! A minimalist argument handler](https://github.com/adishavit/argh)
