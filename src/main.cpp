@@ -57,6 +57,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 #pragma endregion
 
+#pragma region CLI processing
+
+	int mParams[3];
+
+	// Get the current values.
+	SystemParametersInfo(SPI_GETMOUSE, 0, mParams, 0);
+
+	if (cmdl[{ "-d", "--disable" }])
+	{
+		mParams[2] = false;
+	}
+	else if (cmdl[{ "-e", "--enable" }])
+	{
+		mParams[2] = true;
+	}
+
+	// Update the system setting.
+	SystemParametersInfo(SPI_SETMOUSE, 0, mParams, SPIF_SENDCHANGE);
+
+#pragma endregion
 
 	LPCWSTR settingsName = L"WindowPlacement";
 	auto vm = sf::VideoMode(280, 60);
@@ -178,6 +198,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 		if (!isOpen) break;
 
+#pragma region Change acceleration settings
+
 		int mouseParams[3], accel;
 
 		// Get the current values.
@@ -190,8 +212,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 		// Value has been changed by user
 		if (accel != mouseParams[2])
+		{
 			// Update the system setting.
 			SystemParametersInfo(SPI_SETMOUSE, 0, mouseParams, SPIF_SENDCHANGE);
+		}
+
+#pragma endregion
 
 		ImGui::End();
 
