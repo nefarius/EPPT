@@ -76,6 +76,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	// Update the system setting.
 	SystemParametersInfo(SPI_SETMOUSE, 0, mParams, SPIF_SENDCHANGE);
 
+	// do not create window, exit if instructed
+	if (cmdl[{ "-a", "--exit" }])
+	{
+		return ERROR_SUCCESS;
+	}
+
 #pragma endregion
 
 	LPCWSTR settingsName = L"WindowPlacement";
