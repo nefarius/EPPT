@@ -28,6 +28,8 @@ And enable:
 .\EPPT.exe --enable --exit
 ```
 
+If you omit the `--exit` switch the main window will get displayed.
+
 ## 3rd party credits
 
 - [Dear ImGui](https://github.com/ocornut/imgui)
