@@ -71,8 +71,8 @@ IDI_ICON1               ICON                    "favicon.ico"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,1,0,0
- PRODUCTVERSION 1,1,0,0
+ FILEVERSION 1,2,0,0
+ PRODUCTVERSION 1,2,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -85,21 +85,21 @@ VS_VERSION_INFO VERSIONINFO
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK "080904b0"
+        BLOCK "0c0704b0"
         BEGIN
-            VALUE "CompanyName", "Nefarius"
+            VALUE "CompanyName", "Benjamin ""Nefarius"" Höglinger-Stelzer"
             VALUE "FileDescription", "Enhance Pointer Precision Tool"
-            VALUE "FileVersion", "1.1.0.0"
+            VALUE "FileVersion", "1.2.0.0"
             VALUE "InternalName", "EPPT.exe"
-            VALUE "LegalCopyright", "Copyright (C) 2020 Nefarius"
+            VALUE "LegalCopyright", "Copyright (C) 2020-2023 Benjamin ""Nefarius"" Höglinger-Stelzer"
             VALUE "OriginalFilename", "EPPT.exe"
             VALUE "ProductName", "Enhance Pointer Precision Tool"
-            VALUE "ProductVersion", "1.1.0.0"
+            VALUE "ProductVersion", "1.2.0.0"
         END
     END
     BLOCK "VarFileInfo"
     BEGIN
-        VALUE "Translation", 0x809, 1200
+        VALUE "Translation", 0xc07, 1200
     END
 END
 
