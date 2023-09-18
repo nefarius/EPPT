@@ -30,6 +30,22 @@ And enable:
 
 If you omit the `--exit` switch the main window will get displayed.
 
+### Register in Autostart
+
+The following sequence registers the tool in the current user's autostart, disables acceleration and then exits without creating a window:
+
+```cmd
+.\EPPT.exe -r --with-disable --with-exit -a
+```
+
+### Unregister from Autostart
+
+The following sequence removes the tool from the current user's autostart and then exits without creating a window:
+
+```cmd
+.\EPPT.exe -u -a
+```
+
 ## 3rd party credits
 
 - [Dear ImGui](https://github.com/ocornut/imgui)

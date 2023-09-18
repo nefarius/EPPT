@@ -14,11 +14,34 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
 
+//
+// STL
+// 
+#include <format>
+
 // CLI parser
 #include <argh.h>
 
+//
+// Custom
+// 
 #include "UniUtil.h"
 #include "resource.h"
+
+EXTERN_C IMAGE_DOS_HEADER __ImageBase;
+
+static std::wstring GetImageBasePathW()
+{
+	wchar_t myPath[MAX_PATH + 1] = { 0 };
+
+	GetModuleFileNameW(
+		reinterpret_cast<HINSTANCE>(&__ImageBase),
+		myPath,
+		MAX_PATH + 1
+	);
+
+	return std::wstring(myPath);
+}
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
@@ -75,6 +98,43 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 	// Update the system setting.
 	SystemParametersInfo(SPI_SETMOUSE, 0, mParams, SPIF_SENDCHANGE);
+
+	// register ourselves in autostart of current user
+	if (cmdl[{ "-r", "--register-autostart" }])
+	{
+		HKEY hKey = nullptr;
+		std::wstring myself = GetImageBasePathW();
+		RegCreateKey(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", &hKey);
+
+		bool withDisable = cmdl[{ "--with-disable" }];
+		bool withEnable = cmdl[{ "--with-enable" }];
+		bool withExit = cmdl[{ "--with-exit" }];
+
+		std::wstring command = std::format(
+			L"\"{}\" {} {} {}",
+			myself,
+			withDisable ? L"-d" : L"",
+			withEnable ? L"-e" : L"",
+			withExit ? L"-a" : L""
+		);
+
+		RegSetValueEx(
+			hKey,
+			L"EPPT", 
+			0, 
+			REG_SZ,
+			reinterpret_cast<BYTE*>(command.data()),
+			(wcslen(command.c_str()) + 1) * 2
+		);
+	}
+
+	// remove ourselves from autostart of current user
+	if (cmdl[{ "-u", "--unregister-autostart" }])
+	{
+		HKEY hKey = nullptr;
+		RegCreateKey(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", &hKey);
+		RegDeleteValue(hKey, L"EPPT");
+	}
 
 	// do not create window, exit if instructed
 	if (cmdl[{ "-a", "--exit" }])
