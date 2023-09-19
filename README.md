@@ -1,4 +1,4 @@
-<img src="assets/mouse.png" align="right" />
+<img src="assets/mouse_128x128.png" align="right" />
 
 # Enhance Pointer Precision Tool
 
