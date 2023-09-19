@@ -159,7 +159,7 @@ MB_OK | MB_ICONINFORMATION
 			0,
 			REG_SZ,
 			reinterpret_cast<BYTE*>(command.data()),
-			(wcslen(command.c_str()) + 1) * 2
+			static_cast<DWORD>(wcslen(command.c_str()) + 1) * 2
 		);
 	}
 
