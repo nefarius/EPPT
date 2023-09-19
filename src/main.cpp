@@ -28,6 +28,13 @@
 #include "UniUtil.h"
 #include "resource.h"
 
+//
+// Enable visual styles
+// 
+#pragma comment(linker,"\"/manifestdependency:type='win32' \
+name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
+processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
 static std::wstring GetImageBasePathW()
@@ -82,6 +89,34 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 #pragma region CLI processing
 
+	//
+	// Show help
+	// 
+	if (cmdl[{ "-h", "-?", "--help" }])
+	{
+		MessageBox(
+			nullptr,
+			LR"(The following command line switches are supported:
+
+-h|-?|--help	Displays this help :) 
+-d|--disable	Disable acceleration on launch
+-e|--enable	Enable acceleration on launch
+-a|--exit		Exit without creating a window
+
+-r|--register-autostart	Self-registers this instance in current user's autostart
+    --with-disable	Runs disable action on autostart
+    --with-enable	Runs enable action on autostart
+    --with-exit	Exits without window when done on autostart
+
+-u|--unregister-autostart	Removes this instance from current user's autostart
+)",
+L"EPPT command line options",
+MB_OK | MB_ICONINFORMATION
+);
+
+		return ERROR_SUCCESS;
+	}
+
 	int mParams[3];
 
 	// Get the current values.
@@ -120,8 +155,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 		RegSetValueEx(
 			hKey,
-			L"EPPT", 
-			0, 
+			L"EPPT",
+			0,
 			REG_SZ,
 			reinterpret_cast<BYTE*>(command.data()),
 			(wcslen(command.c_str()) + 1) * 2
